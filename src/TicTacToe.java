@@ -4,11 +4,10 @@ import java.util.*;
 
 public class TicTacToe {
 
-    private static String board[][] = new String[3][3];
-
     public static void main(String[] args) {
         System.out.println("Game Start! Player1: X, Player2: O");
-        init();
+        String board[][] = new String[3][3];
+        init(board);
         int steps = 1;
         while (steps <= 10) {
             while (true) {
@@ -16,10 +15,10 @@ public class TicTacToe {
                 Scanner scanner = new Scanner(System.in);
                 try {
                     Pair<Integer, Integer> input = validate(scanner.nextLine());
-                    if (!exists(input)) {
+                    if (!exists(board, input)) {
                         board[input.getKey()][input.getValue()] = steps % 2 != 0 ? "X" : "O";
-                        draw();
-                        if (win()) {
+                        draw(board);
+                        if (win(board)) {
                             System.out.println("Player " + (steps % 2 != 0 ? "1" : "2") + " wins the game. Game Over!");
                             System.exit(1);
                         } else {
@@ -38,15 +37,15 @@ public class TicTacToe {
         }
     }
 
-    private static void add(List<String> list, String data) {
+    static void add(List<String> list, String data) {
         if (!data.equals(" ")) {
             list.add(data);
         }
     }
 
-    private static boolean win() {
+    static boolean win(String board[][]) {
         List<String> list;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i <= 2; i++) {
             list = new ArrayList<>(2);
             add(list, board[i][0]);
             add(list, board[i][1]);
@@ -56,7 +55,7 @@ public class TicTacToe {
             }
         }
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i <= 2; i++) {
             list = new ArrayList<>(2);
             add(list, board[0][i]);
             add(list, board[1][i]);
@@ -87,11 +86,11 @@ public class TicTacToe {
         return false;
     }
 
-    private static boolean exists(Pair<Integer, Integer> pair) {
+    static boolean exists(String board[][], Pair<Integer, Integer> pair) {
         return !board[pair.getKey()][pair.getValue()].equals(" ");
     }
 
-    private static void init() {
+    static void init(String board[][]) {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 board[i][j] = " ";
@@ -99,7 +98,7 @@ public class TicTacToe {
         }
     }
 
-    private static Pair<Integer, Integer> validate(String line) {
+    static Pair<Integer, Integer> validate(String line) {
         String[] splits = line.split(",");
         if (splits.length != 2) {
             throw new IllegalArgumentException("Invalid input. ");
@@ -115,7 +114,7 @@ public class TicTacToe {
         }
     }
 
-    private static void draw() {
+    private static void draw(String board[][]) {
         System.out.println("|---|---|---|");
         System.out.println("| " + board[0][0] + " | " + board[0][1] + " | " + board[0][2] + " |");
         System.out.println("|-----------|");
